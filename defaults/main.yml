@@ -1,0 +1,3 @@
+rbenv_install_ruby_version: "2.0.0-p576"
+rbenv_install_gems:
+    - bundler

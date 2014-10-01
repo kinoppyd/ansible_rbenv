@@ -1,0 +1,31 @@
+---
+
+- name: clone rbenv repository
+  git:
+      repo=https://github.com/sstephenson/rbenv.git
+      dest=$HOME/.rbenv
+
+- name: clone rbenv ruby-build repository
+  git:
+      repo=https://github.com/sstephenson/ruby-build.git
+      dest=$HOME/.rbenv/plugins/ruby-build
+
+- name: add rbenv init to path for access to the rbenv command-line utility
+  shell: echo 'export PATH="$HOME/.rbenv/bin:$PATH"' >> $HOME/.bash_profile
+
+- name: add rbenv init to shell to enable shims and autocompletion
+  shell: echo 'eval "$(rbenv init -)"' >> ~/.bash_profile
+
+- name: reload configuratin
+  shell: source $HOME/.bash_profile
+
+- name: install ruby
+  shell: rbenv install {{ rbenv_install_ruby_version }}
+
+- name: install global gems
+  shell: rbenv exec gem install {{ item }}
+  with_items:
+      {{ rbenv_install_gems }}
+
+- name: rehash rbenv
+  shell: rbenv rehash
